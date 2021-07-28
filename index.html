@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html><head><meta charset=utf-8>
+<title>Swipe (with Hammer.js)</title>
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<style>
+html,body {
+	background: #eee;
+	color: #333;
+	font: 1em/1.3 Arial, sans; max-width: 45em;
+}
+
+h1 {
+	font-size: 1.2em;
+}
+
+output {
+	display: block;
+	padding: 1em 0.5em;
+	background: #ddd;
+	height: 2em;
+	overflow:auto;
+	font-size: 3em;
+	text-align: center;
+}text-align: center;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+<script>
+window.addEventListener('load', function() {
+	var el = document.getElementsByTagName('output')[0];
+	/* var hammertime = new Hammer(myElement, myOptions); */
+	/* var hammertime = Hammer(el, { touchAction: 'none' }); not necessary anymore - see https://github.com/hammerjs/hammer.js/pull/855 */
+	var hammertime = Hammer(el);
+	/* by default only horizontal pan/swipe is fully supported */
+	hammertime.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+	/* the magic... */
+	hammertime.on('swipe', function(ev) {
+		var direction = '';
+	    switch(ev.direction) {
+	    	case Hammer.DIRECTION_LEFT:
+	    		direction = 'left';
+	    		break;
+	    	case Hammer.DIRECTION_RIGHT:
+	    		direction = 'right';
+	    		break;
+	    	case Hammer.DIRECTION_UP:
+	    		direction = 'up';
+	    		break;
+	    	case Hammer.DIRECTION_DOWN:
+	    		direction = 'down';
+	    		break;
+	    }
+	    el.innerHTML = ev.type + ' ' + direction;
+	});
+}, false);
+</script>
+</head><body>
+<h1>Swipe</h1>
+<p>Detecting swipe gestures using <a href="http://hammerjs.github.io/">Hammer.js</a></p>
+<pre><code>var hammertime = Hammer(el);
+hammertime.get('swipe').set({
+    direction: Hammer.DIRECTION_ALL
+});</code></pre>
+<output></output>
+<p><small>Ensure that you're using Hammer.js v2.0.5 or greater, as previous versions contain a fundamental problem with <code>touch-action</code> values – see <cite><a href="https://github.com/hammerjs/hammer.js/pull/855">Fix erroneous `pan-x pan-y` use and handling #855</a></cite>.</small></p>
+</body></html>
